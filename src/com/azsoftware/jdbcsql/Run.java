@@ -1,11 +1,16 @@
 package com.azsoftware.jdbcsql;
 
+import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.GnuParser;
 import org.apache.commons.cli.ParseException;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVPrinter;
 
 public class Run {
 
@@ -22,6 +27,29 @@ public class Run {
 	private static String url;
 
 	private static String driver;
+
+	private static Connection conn;
+
+	private static ResultSet resSet;
+
+	public static ResultSet execQry(Connection conn, String qry) throws SQLException {
+		Statement stmt = null;
+		ResultSet rs = null;
+
+		try {
+	        stmt = conn.createStatement();
+	        boolean executed = stmt.execute(qry);
+	        if (executed) {
+	            rs = stmt.getResultSet();
+	        } else {
+	            stmt.getUpdateCount();
+	        }
+		} finally {
+            //if (stmt != null) stmt.close();
+        }
+
+		return rs;
+	}
 
     public static void main(String[] args) {
 
@@ -40,7 +68,7 @@ public class Run {
         try {
         	line = new GnuParser().parse( cli.options, args );
 		} catch (ParseException e) {
-			System.out.println( e.getMessage() );
+			System.err.println( e.getMessage() );
 			System.exit(exit_status_err);
 		}
 
@@ -61,26 +89,63 @@ public class Run {
             		port,
             		line.getOptionValue( cli.optionDBName.getOpt() ) );
         } catch (Exception e) {
-			System.out.println( "Can't find settings for database management system: " + line.getOptionValue( cli.optionMS.getOpt() ));
-			System.out.println( "Please add settings in file "+JDBCConfig.class.getSimpleName() +".properties" );
+			System.err.println( "Can't find settings for database management system: " + line.getOptionValue( cli.optionMS.getOpt() ));
+			System.err.println( "Please add settings in file "+JDBCConfig.class.getSimpleName() +".properties" );
 			System.exit(exit_status_err);
         }
 
         try {
             Class.forName(driver);
         } catch (Exception e) {
-            System.out.println("Unable to load driver: " + driver);
+            System.err.println("Unable to load driver: " + driver);
 			System.exit(exit_status_err);
         }
 
         try {
-            DriverManager.getConnection(url,
+        	conn = DriverManager.getConnection(url,
             		line.getOptionValue( cli.optionUser.getOpt() ),
             		line.getOptionValue( cli.optionPass.getOpt() )
             );
         } catch (SQLException ex) {
-            System.out.println( "Unable to create connection: " + url );
-            System.out.println( ex.getMessage() );
+            System.err.println( "Unable to create connection: " + url );
+            System.err.println( ex.getMessage() );
+            System.exit(exit_status_err);
+        }
+
+        String qry = "select * from aaccounts.users";
+
+        try {
+        	resSet = execQry(conn, qry);
+        } catch (SQLException ex) {
+            System.err.println( "Can't execute query: " + qry );
+            System.err.println( ex.getMessage() );
+            System.exit(exit_status_err);
+        }
+
+        if (resSet != null)
+	        try {
+	        	CSVFormat csvFormat = CSVFormat.DEFAULT;
+	        	if ( !line.hasOption(cli.optionHideHeaders.getOpt()) )
+	        		csvFormat.withHeader(resSet).print(System.out);
+	        	csvFormat.withDelimiter( '\t' );
+	        	if ( line.hasOption(cli.optionSeparator.getOpt()) )
+	        		csvFormat = csvFormat.withDelimiter( line.getOptionValue(cli.optionSeparator.getOpt()).charAt(0) );
+
+	        	CSVPrinter csvPrint=new CSVPrinter(System.out, csvFormat);
+	        	csvPrint.printRecords(resSet);
+	        	csvPrint.flush();
+	        	csvPrint.close();
+	        } catch (Exception e) {
+	            System.err.println( "Can't output query result to stdout" );
+	            System.err.println( e.getMessage() );
+	            System.exit(exit_status_err);
+	        }
+
+        try {
+            conn.close();
+        } catch (SQLException ex) {
+            System.err.println( "Can't close connection" );
+            System.err.println( ex.getMessage() );
             System.exit(exit_status_err);
         }
 
