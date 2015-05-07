@@ -24,6 +24,8 @@ public class Run {
 
 	private static boolean hideHeaders = false;
 
+	private static char separator = '\t';
+
 	private static String url;
 
 	private static String driver;
@@ -78,6 +80,15 @@ public class Run {
         if ( line.hasOption(cli.optionHideHeaders.getOpt()) )
         	hideHeaders = true;
 
+    	if ( line.hasOption(cli.optionSeparator.getOpt()) ) {
+    		if ( line.getOptionValue(cli.optionSeparator.getOpt()).length() == 1 ) {
+    			separator = line.getOptionValue(cli.optionSeparator.getOpt()).charAt(0);
+    		} else {
+    			System.err.println( "Separator is not correct" );
+    			System.exit(exit_status_err);
+    		}
+    	}
+
         if ( "oracle".equals( line.getOptionValue(cli.optionMS.getOpt()).toLowerCase() ) && port == 0 )
         	port = 1526;
 
@@ -112,7 +123,7 @@ public class Run {
             System.exit(exit_status_err);
         }
 
-        String qry = "select * from aaccounts.users";
+        String qry = "select usrid, username, passwrd, firstname from aaccounts.users";
 
         try {
         	resSet = execQry(conn, qry);
@@ -124,12 +135,9 @@ public class Run {
 
         if (resSet != null)
 	        try {
-	        	CSVFormat csvFormat = CSVFormat.DEFAULT;
+	        	CSVFormat csvFormat = CSVFormat.DEFAULT.withDelimiter(separator);
 	        	if ( !line.hasOption(cli.optionHideHeaders.getOpt()) )
 	        		csvFormat.withHeader(resSet).print(System.out);
-	        	csvFormat.withDelimiter( '\t' );
-	        	if ( line.hasOption(cli.optionSeparator.getOpt()) )
-	        		csvFormat = csvFormat.withDelimiter( line.getOptionValue(cli.optionSeparator.getOpt()).charAt(0) );
 
 	        	CSVPrinter csvPrint=new CSVPrinter(System.out, csvFormat);
 	        	csvPrint.printRecords(resSet);
