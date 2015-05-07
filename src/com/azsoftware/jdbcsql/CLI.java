@@ -75,6 +75,7 @@ public class CLI {
 			.withDescription("column separator (default: \"\\t\")")
 			.hasArg()
 			.withArgName("SEPARATOR")
+			.withType(Character.class)
 			.create("s");
 
 	// help
