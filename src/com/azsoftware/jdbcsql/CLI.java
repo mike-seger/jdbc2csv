@@ -103,7 +103,7 @@ public class CLI {
 	public void usage() {
 		System.out.println(
 			"jdbcsql execute queries in diferent databases such as mysql, oracle, postgresql and etc.\n"
-			+ "Query with resultset output over stdout in format CSV.\n");
+			+ "Query with resultset output over stdout in CSV format.\n");
 
 		// automatically generate the help statement
 		HelpFormatter formatter = new HelpFormatter();

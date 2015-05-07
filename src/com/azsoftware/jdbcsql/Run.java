@@ -142,7 +142,7 @@ public class Run {
 
         if (resSet != null)
 	        try {
-	        	CSVFormat csvFormat = CSVFormat.DEFAULT.withDelimiter(separator);
+	        	CSVFormat csvFormat = CSVFormat.RFC4180.withDelimiter(separator);
 	        	if ( !line.hasOption(cli.optionHideHeaders.getOpt()) )
 	        		csvFormat.withHeader(resSet).print(System.out);
 
