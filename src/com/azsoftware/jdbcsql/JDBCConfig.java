@@ -13,7 +13,7 @@ public class JDBCConfig {
 	public static String getUrl(String dbms, String host, Integer port, String database) {
 		String url = jdbcConfig.getString(dbms+"_url");
 		url = url.replace("host", host);
-		url = url.replace("database", database);
+		url = url.replace("dbname", database);
 		if (port>0) {
 			url = url.replace("port", port.toString());
 		} else {
