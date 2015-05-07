@@ -26,6 +26,8 @@ public class Run {
 
 	private static char separator = '\t';
 
+	private static String qry;
+
 	private static String url;
 
 	private static String driver;
@@ -89,6 +91,13 @@ public class Run {
     		}
     	}
 
+        if ( line.getArgs().length == 1 ) {
+            qry = line.getArgs()[0];
+		} else {
+			System.err.println( "SQL is empty" );
+			System.exit(exit_status_err);
+		}
+
         if ( "oracle".equals( line.getOptionValue(cli.optionMS.getOpt()).toLowerCase() ) && port == 0 )
         	port = 1526;
 
@@ -122,8 +131,6 @@ public class Run {
             System.err.println( ex.getMessage() );
             System.exit(exit_status_err);
         }
-
-        String qry = "select usrid, username, passwrd, firstname from aaccounts.users";
 
         try {
         	resSet = execQry(conn, qry);
