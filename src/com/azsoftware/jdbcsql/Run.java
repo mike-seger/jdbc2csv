@@ -97,10 +97,10 @@ public class Run {
 			System.err.println( "SQL is empty" );
 			System.exit(exit_status_err);
 		}
-
+/*
         if ( "oracle".equals( line.getOptionValue(cli.optionMS.getOpt()).toLowerCase() ) && port == 0 )
         	port = 1526;
-
+*/
         try {
         	driver = JDBCConfig.getDriver( line.getOptionValue( cli.optionMS.getOpt() ) );
         	url = JDBCConfig.getUrl(
