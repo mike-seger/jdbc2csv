@@ -85,7 +85,7 @@ public class Run {
         if ( line.getArgs().length == 1 ) {
             qry = line.getArgs()[0];
 		} else {
-			System.err.println( "SQL is empty" );
+			System.err.println( line.getArgs().length < 1 ? "SQL is empty" : "Too many SQL" );
 			System.exit(exit_status_err);
 		}
 /*
