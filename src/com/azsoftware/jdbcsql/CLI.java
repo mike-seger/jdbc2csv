@@ -107,7 +107,7 @@ public class CLI {
 
 		// automatically generate the help statement
 		HelpFormatter formatter = new HelpFormatter();
-		formatter.printHelp( "jdbcsql [OPTION] sql", options );
+		formatter.printHelp( "jdbcsql [OPTION]... SQL", options );
 		System.out.println();
 	}
 }
