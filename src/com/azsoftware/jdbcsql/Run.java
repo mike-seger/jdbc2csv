@@ -22,8 +22,6 @@ public class Run {
 
 	private static int port;
 
-	private static boolean hideHeaders = false;
-
 	private static char separator = '\t';
 
 	private static String qry;
@@ -42,12 +40,8 @@ public class Run {
 
 		try {
 	        stmt = conn.createStatement();
-	        boolean executed = stmt.execute(qry);
-	        if (executed) {
-	            rs = stmt.getResultSet();
-	        } else {
-	            stmt.getUpdateCount();
-	        }
+	        if (stmt.execute(qry))
+	        	rs = stmt.getResultSet();
 		} finally {
             //if (stmt != null) stmt.close();
         }
@@ -78,9 +72,6 @@ public class Run {
 
         if ( line.hasOption(cli.optionPort.getOpt()) )
         	port = Integer.parseUnsignedInt( line.getOptionValue(cli.optionPort.getOpt()) );
-
-        if ( line.hasOption(cli.optionHideHeaders.getOpt()) )
-        	hideHeaders = true;
 
     	if ( line.hasOption(cli.optionSeparator.getOpt()) ) {
     		if ( line.getOptionValue(cli.optionSeparator.getOpt()).length() == 1 ) {
