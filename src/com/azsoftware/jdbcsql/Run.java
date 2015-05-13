@@ -77,7 +77,7 @@ public class Run {
     		if ( line.getOptionValue(cli.optionSeparator.getOpt()).length() == 1 ) {
     			separator = line.getOptionValue(cli.optionSeparator.getOpt()).charAt(0);
     		} else {
-    			System.err.println( "Separator is not correct" );
+    			System.err.println( "Uncorrect separator" );
     			System.exit(exit_status_err);
     		}
     	}
@@ -101,7 +101,7 @@ public class Run {
             		line.getOptionValue( cli.optionDBName.getOpt() ) );
         } catch (Exception e) {
 			System.err.println( "Can't find settings for database management system: " + line.getOptionValue( cli.optionMS.getOpt() ));
-			System.err.println( "Please add settings in file "+JDBCConfig.class.getSimpleName() +".properties" );
+			System.err.println( "Please add settings in the file "+JDBCConfig.class.getSimpleName() +".properties" );
 			System.exit(exit_status_err);
         }
 
