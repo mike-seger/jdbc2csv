@@ -70,6 +70,14 @@ public class CLI {
 	protected Option optionHideHeaders = new Option("H", "hide-headers", false, "hide headers on output");
 
 	@SuppressWarnings("static-access")
+	protected Option optionCSV = OptionBuilder
+			.withLongOpt("csv-format")
+			.withDescription("Output CSV format (EXCEL, MYSQL, RFC-4180 and TDF). Default is RFC-4180")
+			.hasArg()
+			.withArgName("FORMAT")
+			.create("f");
+
+	@SuppressWarnings("static-access")
 	protected Option optionSeparator = OptionBuilder
 			.withLongOpt("separator")
 			.withDescription("column separator (default: \"\\t\")")
@@ -95,6 +103,7 @@ public class CLI {
 		// stdout
 		options.addOption( optionHideHeaders );
 		options.addOption( optionSeparator );
+		options.addOption( optionCSV );
 
 		// help
 		options.addOption( optionHelp );

@@ -5,6 +5,8 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Arrays;
+import java.util.List;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.GnuParser;
@@ -23,6 +25,8 @@ public class Run {
 	private static int port;
 
 	private static char separator = '\t';
+
+	private static String csv;
 
 	private static String qry;
 
@@ -82,6 +86,16 @@ public class Run {
     		}
     	}
 
+    	if ( line.hasOption(cli.optionCSV.getOpt()) ) {
+    		List<String> csvFormats = Arrays.asList("EXCEL", "MYSQL", "RFC-4180", "TDF");
+    		if ( csvFormats.contains(line.getOptionValue(cli.optionCSV.getOpt()).toUpperCase()) ) {
+    			csv = line.getOptionValue(cli.optionCSV.getOpt()).toUpperCase();
+    		} else {
+    			System.err.println( "Uncorrect output csv format" );
+    			System.exit(exit_status_err);
+    		}
+    	}
+
         if ( line.getArgs().length == 1 ) {
             qry = line.getArgs()[0];
 		} else {
@@ -133,7 +147,18 @@ public class Run {
 
         if (resSet != null)
 	        try {
-	        	CSVFormat csvFormat = CSVFormat.RFC4180.withDelimiter(separator);
+	        	CSVFormat csvFormat;
+	        	if ( "EXCEL".equals(csv) )
+	        	  csvFormat=CSVFormat.EXCEL;
+	        	else if ( "MYSQL".equals(csv) )
+		          csvFormat=CSVFormat.MYSQL;
+	        	else if ( "TDF".equals(csv) )
+		          csvFormat=CSVFormat.TDF;
+	        	else
+		          csvFormat=CSVFormat.RFC4180;
+
+	        	csvFormat=csvFormat.withDelimiter(separator);
+
 	        	if ( !line.hasOption(cli.optionHideHeaders.getOpt()) )
 	        		csvFormat.withHeader(resSet).print(System.out);
 
