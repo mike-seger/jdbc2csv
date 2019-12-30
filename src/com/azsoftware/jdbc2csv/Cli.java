@@ -27,7 +27,6 @@ public class Cli {
   private Option optionJdbcUrl = Option.builder("u")
       .longOpt("jdbc-url")
       .hasArg()
-      .required()
       .argName("URL STRING")
       .desc("JDBC driver connection URL string")
       .build();
