@@ -35,7 +35,7 @@ $ java -cp postgresql-9.3-1102-jdbc4.jar:jdbc2csv-2.0.jar com.azsoftware.jdbc2cs
 
 ### 3. Oracle connection example (ojdbc8-12.2.0.1.jar required)
 ```sh
-$ java ojdbc8-12.2.0.1.jar:jdbc2csv-2.0.jar com.azsoftware.jdbc2csv.Main \
+$ java -cp ojdbc8-12.2.0.1.jar:jdbc2csv-2.0.jar com.azsoftware.jdbc2csv.Main \
     -u 'jdbc:oracle:thin:<user>/<password>@host:port:dbname' \
     'select * from V$VERSION'
 
