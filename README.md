@@ -27,7 +27,7 @@ usage: jdbc2csv [OPTION]... SQL
 ```sh
 $ java -cp postgresql-9.3-1102-jdbc4.jar:jdbc2csv-2.0.jar com.azsoftware.jdbc2csv.Main \
     -f PostgreSQLText \
-    -u 'jdbc:postgresql://localhost:5432/DBName?user=postgres&password=secretkey' \
+    -u 'jdbc:postgresql://localhost:port/dbname?user=postgres&password=secretkey' \
     'select version()'
 
 ```
@@ -38,6 +38,15 @@ $ java -cp postgresql-9.3-1102-jdbc4.jar:jdbc2csv-2.0.jar com.azsoftware.jdbc2cs
 $ java -cp ojdbc8-12.2.0.1.jar:jdbc2csv-2.0.jar com.azsoftware.jdbc2csv.Main \
     -u 'jdbc:oracle:thin:<user>/<password>@host:port:dbname' \
     'select * from V$VERSION'
+
+```
+
+
+### 4. mysql connection example (mysql-connector-java-8.0.18.jar required)
+```sh
+$ java -cp mysql-connector-java-8.0.18.jar:jdbc2csv-2.0.jar com.azsoftware.jdbc2csv.Main \
+    -u 'jdbc:mysql://user:password@host:port/dbname' \
+    'SHOW VARIABLES LIKE "%version%"'
 
 ```
 
