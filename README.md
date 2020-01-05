@@ -1,3 +1,27 @@
+# jdbc2csv-2.1.jar
+### Possibility for reading SQL from stdin
+
+
+
+### 1. Reading SQL from stdin
+```sh
+java -cp postgresql-9.3-1102-jdbc4.jar:jdbc2csv-2.1.jar com.azsoftware.jdbc2csv.Main \
+    -u 'jdbc:postgresql://host:port/dbname?user=postgres&password=secretkey' <<EOF
+
+    select version()
+
+EOF
+```
+
+
+### 2. Reading SQL from stdin
+```sh
+echo 'select version()' | java -cp postgresql-9.3-1102-jdbc4.jar:jdbc2csv-2.1.jar com.azsoftware.jdbc2csv.Main \
+    -f PostgreSQLText \
+    -u 'jdbc:postgresql://host:port/dbname?user=postgres&password=secretkey'
+```
+
+
 # jdbc2csv-2.0.jar
 ### This version using only jdbc url string for connection to DBMS
 
@@ -27,7 +51,7 @@ usage: jdbc2csv [OPTION]... SQL
 ```sh
 $ java -cp postgresql-9.3-1102-jdbc4.jar:jdbc2csv-2.0.jar com.azsoftware.jdbc2csv.Main \
     -f PostgreSQLText \
-    -u 'jdbc:postgresql://localhost:port/dbname?user=postgres&password=secretkey' \
+    -u 'jdbc:postgresql://host:port/dbname?user=postgres&password=secretkey' \
     'select version()'
 
 ```

@@ -22,10 +22,9 @@ public class Main {
       Connection conn = DriverManager.getConnection(cli.getJdbcUrl());
       Statement stmt = conn.createStatement();
       ResultSet resSet = null;
-      if (stmt.execute(cli.getQuery()))
+      if (stmt.execute(cli.getQuery())) {
         resSet = stmt.getResultSet();
 
-      if (resSet != null) {
         CSVFormat csvFormat = cli.getCsvFormat();
         if ( !cli.isHideHeaders() )
           csvFormat.withHeader(resSet).print(System.out);

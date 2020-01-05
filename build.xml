@@ -17,7 +17,7 @@
   </target>
 
   <target name="jar" depends="compile" description="Create jar file">
-    <jar destfile="jdbc2csv-2.0.jar">
+    <jar destfile="jdbc2csv-2.1.jar">
       <fileset dir="${build}"/>
       <archives>
         <zips>

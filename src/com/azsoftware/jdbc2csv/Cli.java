@@ -1,5 +1,9 @@
 package com.azsoftware.jdbc2csv;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.stream.Collectors;
+
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -47,28 +51,33 @@ public class Cli {
     CommandLineParser parser = new DefaultParser();
     CommandLine cmd = parser.parse( options, args);
 
-    if (cmd.getArgs().length ==0 || cmd.hasOption("h")) {
+    if (cmd.hasOption("h")) {
       usage();
-      System.exit(0);
-    }
-
-    if (cmd.hasOption(optionJdbcUrl.getOpt())) {
-      jdbcUrl = cmd.getOptionValue(optionJdbcUrl.getOpt());
-    }
-
-    if (cmd.hasOption(optionCsvFormat.getOpt())) {
-      csvFormat = CSVFormat.Predefined.valueOf(cmd.getOptionValue(optionCsvFormat.getOpt())).getFormat();
-    }
-
-    if (cmd.hasOption(optionHideHeaders.getOpt())) {
-      hideHeaders = true;
-    }
-
-    if ( cmd.getArgs().length == 1 ) {
-      query = cmd.getArgs()[0];
     } else {
-      System.err.println( cmd.getArgs().length < 1 ? "SQL is empty" : "Too many SQL" );
-      System.exit(Main.exit_status_err);
+      if (cmd.hasOption(optionCsvFormat.getOpt())) {
+        csvFormat = CSVFormat.Predefined.valueOf(cmd.getOptionValue(optionCsvFormat.getOpt())).getFormat();
+      }
+
+      if (cmd.hasOption(optionHideHeaders.getOpt())) {
+        hideHeaders = true;
+      }
+
+      if (cmd.hasOption(optionJdbcUrl.getOpt())) {
+        jdbcUrl = cmd.getOptionValue(optionJdbcUrl.getOpt());
+
+        if ( cmd.getArgs().length == 0 ) {
+          BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+          query = br.lines().collect(Collectors.joining( System.getProperty("line.separator") ));
+        } else if ( cmd.getArgs().length == 1 ) {
+          query = cmd.getArgs()[0];
+        } else {
+          System.err.println( "Too many SQL" );
+          System.exit(Main.exit_status_err);
+        }
+      } else {
+        System.err.println( String.format("Option --%s required", optionJdbcUrl.getLongOpt()) );
+        System.exit(Main.exit_status_err);
+      }
     }
   }
 
