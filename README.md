@@ -30,8 +30,8 @@ echo 'select version()' | java -cp postgresql-9.3-1102-jdbc4.jar:jdbc2csv-2.1.ja
 ### 1. Help
 ```sh
 $ java -jar jdbc2csv-2.0.jar
-jdbc2csv execute queries in diferent databases such as mysql, oracle, postgresql and etc.
-Query with resultset output over stdout in CSV format.
+jdbc2csv execute queries in JDBC copmpatible databases such as mysql, oracle, postgresql etc.
+Run a SQL query with resultset output to stdout in CSV format.
 
 usage: jdbc2csv [OPTION]... SQL
  -f,--csv-format <FORMAT>     Output CSV format with possibale values:
