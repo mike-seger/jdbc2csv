@@ -1,7 +1,7 @@
 # jdbc2csv-2.1.jar
 ### Possibility for reading SQL from stdin
 
-
+THIS IS A FORK FROM https://sourceforge.net/projects/jdbcsql/ PORTED TO GRADLE
 
 ### 1. Reading SQL from stdin
 ```sh
